@@ -6,12 +6,11 @@
 [![Coverage][coverage-badge]][coverage]
 [![Downloads][downloads-badge]][downloads]
 [![Size][size-badge]][size]
-[![Chat][chat-badge]][chat]
 
 [micromark][] extensions to support math with additional LaTeX-style
 delimiters (`$C_L$`, `\(C_L\)`, `\[C_L\]`).
 
-## Fork Notice
+## Notice
 
 This package is an **extended version** of the MIT-licensed
 `micromark-extension-math`.
@@ -26,25 +25,35 @@ It adds LaTeX-style bracket notation support based on:
 
 ## Contents
 
-* [What is this?](#what-is-this)
-* [When to use this](#when-to-use-this)
-* [Install](#install)
-* [Use](#use)
-* [API](#api)
-  * [`math(options?)`](#mathoptions)
-  * [`mathHtml(options?)`](#mathhtmloptions)
-  * [`HtmlOptions`](#htmloptions)
-  * [`Options`](#options)
-* [Authoring](#authoring)
-* [HTML](#html)
-* [CSS](#css)
-* [Syntax](#syntax)
-* [Types](#types)
-* [Compatibility](#compatibility)
-* [Security](#security)
-* [Related](#related)
-* [Contribute](#contribute)
-* [License](#license)
+- [micromark-extension-math-extended](#micromark-extension-math-extended)
+  - [Extended mathematical notation support for micromark](#extended-mathematical-notation-support-for-micromark)
+  - [Notice](#notice)
+  - [Contents](#contents)
+  - [What is this?](#what-is-this)
+  - [When to use this](#when-to-use-this)
+  - [Install](#install)
+  - [Use](#use)
+  - [API](#api)
+    - [`math(options?)`](#mathoptions)
+          - [Parameters](#parameters)
+          - [Returns](#returns)
+    - [`mathHtml(options?)`](#mathhtmloptions)
+          - [Parameters](#parameters-1)
+          - [Returns](#returns-1)
+    - [`HtmlOptions`](#htmloptions)
+          - [Type](#type)
+    - [`Options`](#options)
+          - [Fields](#fields)
+  - [Authoring](#authoring)
+  - [HTML](#html)
+  - [CSS](#css)
+  - [Syntax](#syntax)
+  - [Types](#types)
+  - [Compatibility](#compatibility)
+  - [Security](#security)
+  - [Related](#related)
+  - [Contribute](#contribute)
+  - [License](#license)
 
 ## What is this?
 
@@ -80,20 +89,20 @@ In Node.js (version 16+), install with [npm][]:
 [npm][]:
 
 ```sh
-npm install micromark-extension-math
+npm install micromark-extension-math-extended
 ```
 
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {math, mathHtml} from 'https://esm.sh/micromark-extension-math@3'
+import {math, mathHtml} from 'https://esm.sh/micromark-extension-math-extended@3'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {math, mathHtml} from 'https://esm.sh/micromark-extension-math@3?bundle'
+  import {math, mathHtml} from 'https://esm.sh/micromark-extension-math-extended@3?bundle'
 </script>
 ```
 
@@ -114,7 +123,7 @@ $$
 ```js
 import fs from 'node:fs/promises'
 import {micromark} from 'micromark'
-import {math, mathHtml} from 'micromark-extension-math'
+import {math, mathHtml} from 'micromark-extension-math-extended'
 
 const output = micromark(await fs.readFile('example.md'), {
   extensions: [math()],
@@ -391,21 +400,17 @@ See [license][].
 
 [build]: https://github.com/micromark/micromark-extension-math/actions
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/micromark/micromark-extension-math.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/Jerrynh770/micromark-extension-math-extended.svg
 
-[coverage]: https://codecov.io/github/micromark/micromark-extension-math
+[coverage]: https://codecov.io/github/Jerrynh770/micromark-extension-math-extended
 
-[downloads-badge]: https://img.shields.io/npm/dm/micromark-extension-math.svg
+[downloads-badge]: https://img.shields.io/npm/dm/micromark-extension-math-extended.svg
 
-[downloads]: https://www.npmjs.com/package/micromark-extension-math
+[downloads]: https://www.npmjs.com/package/micromark-extension-math-extended
 
-[size-badge]: https://img.shields.io/badge/dynamic/json?label=minzipped%20size&query=$.size.compressedSize&url=https://deno.bundlejs.com/?q=micromark-extension-math
+[size-badge]: https://img.shields.io/badge/dynamic/json?label=minzipped%20size&query=$.size.compressedSize&url=https://deno.bundlejs.com/?q=micromark-extension-math-extended
 
-[size]: https://bundlejs.com/?q=micromark-extension-math
-
-[chat-badge]: https://img.shields.io/badge/chat-discussions-success.svg
-
-[chat]: https://github.com/micromark/micromark/discussions
+[size]: https://bundlejs.com/?q=micromark-extension-math-extended
 
 [npm]: https://docs.npmjs.com/cli/install
 

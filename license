@@ -1,6 +1,10 @@
 (The MIT License)
 
+Original upstream project:
 Copyright (c) 2020 Titus Wormer <tituswormer@gmail.com>
+
+Fork and subsequent modifications for micromark-extension-math-extended:
+Copyright (c) 2025 Jerry and micromark-extension-math-extended contributors
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
