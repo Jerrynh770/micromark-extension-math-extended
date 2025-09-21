@@ -4,7 +4,7 @@
  */
 
 import {codes} from 'micromark-util-symbol'
-import {mathFlow} from './math-flow.js'
+import {mathFlowDollar, mathFlowBackslash} from './math-flow.js'
 import {mathText} from './math-text.js'
 
 /**
@@ -17,8 +17,16 @@ import {mathText} from './math-text.js'
  *   enable math syntax.
  */
 export function math(options) {
+  const textConstructs = mathText(options)
+
   return {
-    flow: {[codes.dollarSign]: mathFlow},
-    text: {[codes.dollarSign]: mathText(options)}
+    flow: {
+      [codes.dollarSign]: mathFlowDollar,
+      [codes.backslash]: mathFlowBackslash
+    },
+    text: {
+      [codes.dollarSign]: textConstructs.dollar,
+      [codes.backslash]: textConstructs.backslash
+    }
   }
 }

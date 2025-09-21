@@ -131,7 +131,7 @@ test('math', async function (t) {
   )
 
   await t.test(
-    'should support an “escaped” dollar right on the KaTeX level, not on the Markdown level',
+    'should support an "escaped" dollar right on the KaTeX level, not on the Markdown level',
     async function () {
       assert.equal(
         micromark('a $$ \\$ $$ b', {
@@ -216,6 +216,135 @@ test('math', async function (t) {
         '</span> f</p>'
     )
   })
+
+  await t.test('should support inline math with backslash parenthesis', async function () {
+    assert.equal(
+      micromark('a \\(b + c\\) d', {
+        extensions: [math()],
+        htmlExtensions: [mathHtml()]
+      }),
+      '<p>a <span class="math math-inline">' +
+        renderToString('b + c') +
+        '</span> d</p>'
+    )
+  })
+
+  await t.test('should support inline math with backslash brackets', async function () {
+    assert.equal(
+      micromark('value \\[x^2\\] test', {
+        extensions: [math()],
+        htmlExtensions: [mathHtml()]
+      }),
+      '<p>value <span class="math math-inline">' +
+        renderToString('x^2') +
+        '</span> test</p>'
+    )
+  })
+
+  await t.test('should support nested content inside backslash math', async function () {
+    assert.equal(
+      micromark('a \\(\\text{array}[i]\\)', {
+        extensions: [math()],
+        htmlExtensions: [mathHtml()]
+      }),
+      '<p>a <span class="math math-inline">' +
+        renderToString('\\text{array}[i]') +
+        '</span></p>'
+    )
+  })
+
+  await t.test('should support block math with backslash brackets', async function () {
+    assert.equal(
+      micromark('\\[\na + b\n\\]', {
+        extensions: [math()],
+        htmlExtensions: [mathHtml()]
+      }),
+      '<div class="math math-display">' +
+        renderToString('a + b', {displayMode: true}) +
+        '</div>'
+    )
+  })
+
+  await t.test('should treat escaped backslash bracket sequences as literal text', async function () {
+    assert.equal(
+      micromark('a \\\\[escaped\\\\]', {
+        extensions: [math()],
+        htmlExtensions: [mathHtml()]
+      }),
+      '<p>a \\[escaped\\]</p>'
+    )
+  })
+
+  await t.test('should treat escaped backslash parenthesis as literal text', async function () {
+    assert.equal(
+      micromark('a \\\\(b\\\\) c', {
+        extensions: [math()],
+        htmlExtensions: [mathHtml()]
+      }),
+      '<p>a \\(b\\) c</p>'
+    )
+  })
+
+  await t.test('should reject backslash block meta on the opening line', async function () {
+    assert.equal(
+      micromark('\\\\[meta]', {
+        extensions: [math()],
+        htmlExtensions: [mathHtml()]
+      }),
+      '<p>\\[meta]</p>'
+    )
+  })
+
+  await t.test('should support line endings inside backslash math', async function () {
+    assert.equal(
+      micromark('\\(a\nb\\)', {
+        extensions: [math()],
+        htmlExtensions: [mathHtml({throwOnError: false})]
+      }),
+      '<p><span class="math math-inline">' +
+        renderToString('a\nb', {throwOnError: false}) +
+        '</span></p>'
+    )
+  })
+
+  await t.test('should support empty backslash math delimiters', async function () {
+    assert.equal(
+      micromark('\\(\\) and \\[\\]', {
+        extensions: [math()],
+        htmlExtensions: [mathHtml()]
+      }),
+      '<p><span class="math math-inline">' +
+        renderToString('') +
+        '</span> and <span class="math math-inline">' +
+        renderToString('') +
+        '</span></p>'
+    )
+  })
+
+  await t.test('should not treat unclosed backslash math as math', async function () {
+    assert.equal(
+      micromark('\\(incomplete and \\[unfinished', {
+        extensions: [math()],
+        htmlExtensions: [mathHtml()]
+      }),
+      '<p>(incomplete and [unfinished</p>'
+    )
+  })
+
+  await t.test('should support mixing dollar and backslash inline math', async function () {
+    assert.equal(
+      micromark('value $x$ and \\(y\\)', {
+        extensions: [math()],
+        htmlExtensions: [mathHtml()]
+      }),
+      '<p>value <span class="math math-inline">' +
+        renderToString('x') +
+        '</span> and <span class="math math-inline">' +
+        renderToString('y') +
+        '</span></p>'
+    )
+  })
+
 
   await t.test(
     'should not support math (flow) w/ one dollar sign',
