@@ -1,11 +1,13 @@
 {
-  "name": "micromark-extension-math",
-  "version": "3.1.0",
-  "description": "micromark extension to support math (`$C_L$`)",
+  "name": "micromark-extension-math-extended",
+  "version": "3.2.0",
+  "description": "micromark extension to support math (`$C_L$`) and (`\\[C_L\\]`)",
   "license": "MIT",
   "keywords": [
     "micromark",
     "micromark-extension",
+    "micromark-extension-math",
+    "micromark-extension-math-extended",
     "math",
     "katex",
     "latex",
@@ -13,14 +15,11 @@
     "markdown",
     "unified"
   ],
-  "repository": "micromark/micromark-extension-math",
-  "bugs": "https://github.com/micromark/micromark-extension-math/issues",
-  "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/unified"
-  },
-  "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+  "repository": "Jerrynh770/micromark-extension-math-extended",
+  "bugs": "https://github.com/Jerrynh770/micromark-extension-math-extended/issues",
+  "author": "Jerry Ho <jerrynh770@gmail.com> (https://angelrose.org)",
   "contributors": [
+    "Jerry Ho <jerrynh770@gmail.com> (https://angelrose.org)",
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
   "sideEffects": false,

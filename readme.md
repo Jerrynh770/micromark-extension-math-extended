@@ -1,14 +1,28 @@
-# micromark-extension-math
+# micromark-extension-math-extended
+
+## Extended mathematical notation support for micromark
 
 [![Build][build-badge]][build]
 [![Coverage][coverage-badge]][coverage]
 [![Downloads][downloads-badge]][downloads]
 [![Size][size-badge]][size]
-[![Sponsors][sponsors-badge]][collective]
-[![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-[micromark][] extensions to support math (`$C_L$`).
+[micromark][] extensions to support math with additional LaTeX-style
+delimiters (`$C_L$`, `\(C_L\)`, `\[C_L\]`).
+
+## Fork Notice
+
+This package is an **extended version** of the MIT-licensed
+`micromark-extension-math`.
+It adds LaTeX-style bracket notation support based on:
+
+* Functional specification derived from behavioral observation
+* Standard LaTeX mathematical notation practices
+* Existing micromark extension patterns and APIs
+
+**Original work**: `micromark-extension-math` (c) Titus Wormer
+(MIT License)
 
 ## Contents
 
@@ -38,7 +52,8 @@ This package contains two extensions that add support for math syntax
 in markdown to [`micromark`][micromark].
 
 As there is no spec for math in markdown, this extension follows how code
-(fenced and text) works in Commonmark, but uses dollars.
+(fenced and text) works in Commonmark, but uses dollars and common TeX
+backslash fences.
 
 ## When to use this
 
@@ -94,7 +109,7 @@ L = \frac{1}{2} \rho v^2 S C_L
 $$
 ```
 
-…and our module `example.js` looks as follows:
+...and our module `example.js` looks as follows:
 
 ```js
 import fs from 'node:fs/promises'
@@ -109,11 +124,14 @@ const output = micromark(await fs.readFile('example.md'), {
 console.log(output)
 ```
 
-…now running `node example.js` yields (abbreviated):
+...now running `node example.js` yields (abbreviated):
 
 ```html
-<p>Lift(<span class="math math-inline"><span class="katex">…</span></span>) can be determined by Lift Coefficient (<span class="math math-inline"><span class="katex">…</span></span>) like the following equation.</p>
-<div class="math math-display"><span class="katex-display"><span class="katex">…</span></span></div>
+<p>Lift(<span class="math math-inline"><span class="katex">...</span></span>)
+can be determined by Lift Coefficient
+(<span class="math math-inline"><span class="katex">...</span></span>)
+like the following equation.</p>
+<div class="math math-display"><span class="katex-display"><span class="katex">...</span></span></div>
 ```
 
 ## API
@@ -181,6 +199,7 @@ Configuration (TypeScript type).
   Single dollars work in Pandoc and many other places, but often interfere
   with “normal” dollars in text.
   If you turn this off, you use two or more dollars for text math.
+  Backslash delimiters (`\( ... \)`) and (`\[ ... \]`) are always enabled.
 
 ## Authoring
 
@@ -229,15 +248,19 @@ Math forms with the following BNF:
 mathText ::= sequenceText 1*byte sequenceText
 mathFlow ::= fenceOpen *( eol *line ) [ eol fenceClose ]
 
-; Restriction: not preceded or followed by the marker.
-sequenceText ::= 1*"$"
+sequenceText ::= sequenceTextDollar / sequenceTextBackslash
+sequenceTextDollar ::= 1*"$"
+sequenceTextBackslash ::= "\\" "("
 
 fenceOpen ::= sequenceFlow meta
-; Restriction: the number of markers in the closing fence sequence must be
-; equal to or greater than the number of markers in the opening fence
-; sequence.
-fenceClose ::= sequenceFlow *spaceOrTab
-sequenceFlow ::= 2*"$"
+fenceClose ::= sequenceFlowClose *spaceOrTab
+sequenceFlow ::= sequenceFlowDollar / sequenceFlowBackslash
+sequenceFlowDollar ::= 2*"$"
+sequenceFlowBackslash ::= "\\" "["
+
+sequenceFlowClose ::= sequenceFlowDollarClose / sequenceFlowBackslashClose
+sequenceFlowDollarClose ::= sequenceFlowDollar
+sequenceFlowBackslashClose ::= "\\" "]"
 ; Restriction: the marker cannot occur in `meta`
 meta ::= 1*line
 
@@ -248,18 +271,23 @@ line ::= byte - eol
 ```
 
 The above grammar shows that it is not possible to create empty math (text).
-It is possible to include the sequence marker (dollar) in math (text), by
-wrapping it in bigger or smaller sequences:
+
+You can include the delimiters inside math (text) either by stacking more
+markers or by mixing delimiter styles:
 
 ```markdown
-Include more: $a$$b$ or include less: $$a$b$$.
+Mix styles: \( $a$ \) or include more markers: $a$$b$.
 ```
 
-It is also possible to include just one marker:
+It is also possible to include just one dollar marker by padding with a
+longer fence:
 
 ```markdown
 Include just one: $$ $ $$.
 ```
+
+Backslash fences behave the same way: `\(` must be closed with `\)` and `\[`
+with `\]`.
 
 Sequences are “gready”, in that they cannot be preceded or followed by more
 markers.
@@ -280,8 +308,8 @@ Yields:
 ```html
 <p>Not math: $$x$.</p>
 <p>Not math: $x$$.</p>
-<p>Escapes work, this is math: $<span>…</span>.</p>
-<p>Escapes work, this is math: <span>…</span>$.</p>
+<p>Escapes work, this is math: $<span>...</span>.</p>
+<p>Escapes work, this is math: <span>...</span>$.</p>
 ```
 
 That is because, when turning markdown into HTML, the first and last space,
@@ -352,7 +380,10 @@ abide by its terms.
 
 ## License
 
-[MIT][license] © [Titus Wormer][author]
+MIT © 2020 [Titus Wormer][author].
+
+Extended modifications © 2025 [Jerry Ho][fork-author].
+See [license][].
 
 <!-- Definitions -->
 
@@ -372,12 +403,6 @@ abide by its terms.
 
 [size]: https://bundlejs.com/?q=micromark-extension-math
 
-[sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
-
-[backers-badge]: https://opencollective.com/unified/backers/badge.svg
-
-[collective]: https://opencollective.com/unified
-
 [chat-badge]: https://img.shields.io/badge/chat-discussions-success.svg
 
 [chat]: https://github.com/micromark/micromark/discussions
@@ -389,6 +414,8 @@ abide by its terms.
 [license]: license
 
 [author]: https://wooorm.com
+
+[fork-author]: https://angelrose.org
 
 [contributing]: https://github.com/micromark/.github/blob/main/contributing.md
 
